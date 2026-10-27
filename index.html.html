@@ -1,0 +1,626 @@
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MR App Development | Apps & Developer Hub</title>
+  
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-main: #0a0b10;
+      --card-bg: rgba(16, 18, 27, 0.75);
+      --neon-cyan: #00f2fe;
+      --neon-violet: #7928ca;
+      --neon-pink: #ff007f;
+      --text-main: #e2e8f0;
+      --text-sub: #94a3b8;
+      --border-glow: rgba(0, 242, 254, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(121, 40, 202, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.08) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--neon-cyan), var(--neon-violet));
+      border-radius: 4px;
+    }
+
+    /* Navbar */
+    header {
+      padding: 1.2rem 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 11, 16, 0.85);
+      border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--neon-cyan), var(--neon-violet), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 8px var(--neon-cyan);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #fff, var(--neon-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .hero p {
+      color: var(--text-sub);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 4px solid var(--neon-cyan);
+      padding-left: 12px;
+    }
+
+    /* App Grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 5rem;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      padding: 1.8rem;
+      backdrop-filter: blur(16px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .app-card:hover::before {
+      opacity: 1;
+    }
+
+    .app-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3), inset 0 0 15px rgba(0, 242, 254, 0.1);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .app-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #1e293b;
+      border: 2px solid rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    .app-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .app-ver {
+      font-size: 0.85rem;
+      color: var(--neon-pink);
+      font-weight: 600;
+    }
+
+    .app-desc {
+      color: var(--text-sub);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    /* Futuristic Button */
+    .btn-futuristic {
+      position: relative;
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      outline: none;
+      background: linear-gradient(135deg, var(--neon-violet), var(--neon-cyan));
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+
+    .btn-futuristic::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: 0.5s;
+    }
+
+    .btn-futuristic:hover::after {
+      left: 100%;
+    }
+
+    .btn-futuristic:hover {
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+      box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* About & Developer Section */
+    .about-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 3rem;
+      backdrop-filter: blur(16px);
+      margin-bottom: 4rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .about-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .about-info p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--text-main);
+      font-size: 1.1rem;
+    }
+
+    .contact-item i {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-glow);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      border-color: var(--neon-pink);
+      background: rgba(255, 0, 127, 0.1);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+    }
+
+    /* Modal for Ads / Timer */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #121524;
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--neon-cyan);
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(0, 242, 254, 0.3);
+    }
+
+    .ad-placeholder {
+      width: 100%;
+      height: 220px;
+      background: #0a0b10;
+      border: 1px dashed var(--neon-cyan);
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-sub);
+    }
+
+    .timer-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: var(--neon-cyan);
+    }
+
+    .loader {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid var(--neon-cyan);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 3rem auto;
+    }
+
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-sub);
+      font-size: 1rem;
+      background: rgba(10, 11, 16, 0.95);
+    }
+
+    footer span {
+      color: var(--neon-cyan);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><i class="fa-solid fa-microchip"></i> MR APP HUB</div>
+    <nav>
+      <ul>
+        <li><a href="#apps">Apps</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    
+    <!-- Hero Section -->
+    <div class="hero">
+      <h1>Welcome To MR App Hub</h1>
+      <p>Download all the premium Android apps I have made from here for absolutely free.</p>
+    </div>
+
+    <!-- Apps Section -->
+    <h2 class="section-title" id="apps"><i class="fa-solid fa-cubes"></i> Recent Apps</h2>
+    <div id="loading" class="loader"></div>
+    <div class="app-grid" id="appGrid"></div>
+
+    <!-- About & Developer Section -->
+    <div class="about-section" id="about">
+      <div class="about-grid">
+        
+        <div class="about-info">
+          <h3><i class="fa-solid fa-code"></i> About</h3>
+          <p>MR App Development is mainly dedicated to creating modern, fast, and user-friendly Android applications. We create custom camera apps, media players, notepads, and various tools as needed.</p>Our main goal is to provide the best quality and secure mobile application for free to the users.</p>
+        </div>
+
+        <div class="about-info" id="contact">
+          <h3><i class="fa-solid fa-user-astronaut"></i> Developer Info</h3>
+          <div class="contact-list">
+            <div class="contact-item">
+              <i class="fa-solid fa-envelope"></i>
+              <span>Contact Email: <strong>connecttomrm320@gmail.com</strong></span>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="social-links">
+            <a href="https://facebook.com/mdmun320" target="_blank" class="social-btn">
+              <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i> Facebook 
+            </a>
+            <a href="https://t.me/mrappdevolopment" target="_blank" class="social-btn">
+              <i class="fa-solid fa-paper-plane" style="color: #0088cc;"></i> Telegram Chanel
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Download Modal with Timer & Ads Space -->
+  <div class="modal-overlay" id="downloadModal">
+    <div class="modal-box">
+      <h3 style="font-family:'Orbitron'; color:#fff;">ডাউনলোড লিংক প্রস্তুত হচ্ছে...</h3>
+      
+      <!-- Ad Area Placeholder -->
+      <div class="ad-placeholder" id="adContainer">
+        <p><i class="fa-solid fa-rectangle-ad"></i> বিজ্ঞাপন (Ad Network script)</p>
+      </div>
+
+      <div class="timer-text" id="timerText">অনুগ্রহ করে <span id="countdown">5</span> সেকেন্ড অপেক্ষা করুন...</div>
+      
+      <a id="finalDownloadBtn" class="btn-futuristic" style="display:none;" target="_blank">
+        <i class="fa-solid fa-file-arrow-down"></i> এখন ডাউনলোড করুন
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>Developed by <span>MR APP DEVELOPMENT</span> &copy; 2026 | All Rights Reserved</p>
+  </footer>
+
+  <!-- Firebase SDK Modules -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // আপনার ফায়ারবেস কনফিগারেশন
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHpN2WLOPTP88yxEk3WuU-BTWpZU5JGdw",
+      authDomain: "mr-app-developmet.firebaseapp.com",
+      projectId: "mr-app-developmet",
+      storageBucket: "mr-app-developmet.firebasestorage.app",
+      messagingSenderId: "593418595502",
+      appId: "1:593418595502:web:bcf3aea931a6a26c70913f",
+      measurementId: "G-F3GH07YVZZ"
+    };
+
+    // ফায়ারবেস চালু
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const appGrid = document.getElementById('appGrid');
+    const loading = document.getElementById('loading');
+
+    // Firestore থেকে ডাটা লোড করা
+    async function fetchApps() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "apps"));
+        loading.style.display = 'none';
+        
+        if(querySnapshot.empty) {
+          appGrid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; color: var(--text-sub);'>No apps found. Add data to the Firebase console.</p>";
+          return;
+        }
+
+        querySnapshot.forEach((doc) => {
+          const appData = doc.data();
+          createAppCard(appData);
+        });
+      } catch (error) {
+        console.error("Error fetching apps: ", error);
+        loading.style.display = 'none';
+        appGrid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; color: var(--neon-pink);'>ডাটা লোড করতে সমস্যা হয়েছে!</p>";
+      }
+    }
+
+    function createAppCard(data) {
+      const card = document.createElement('div');
+      card.className = 'app-card';
+      card.innerHTML = `
+        <div>
+          <div class="app-header">
+            <img src="${data.icon || 'https://via.placeholder.com/70'}" class="app-icon" alt="App Icon">
+            <div>
+              <div class="app-title">${data.name || 'App Name'}</div>
+              <div class="app-ver">v${data.version || '1.0.0'}</div>
+            </div>
+          </div>
+          <div class="app-desc">${data.description || 'বিবরণ উপলব্ধ নয়।'}</div>
+        </div>
+        <button class="btn-futuristic" onclick="startDownloadTimer('${data.downloadUrl}')">
+          <i class="fa-solid fa-download"></i> ডাউনলোড করুন
+        </button>
+      `;
+      appGrid.appendChild(card);
+    }
+
+    fetchApps();
+  </script>
+
+  <script>
+    // ডাউনলোডের কাউন্টডাউন টাইমার
+    function startDownloadTimer(downloadUrl) {
+      const modal = document.getElementById('downloadModal');
+      const timerText = document.getElementById('timerText');
+      const countdownSpan = document.getElementById('countdown');
+      const finalBtn = document.getElementById('finalDownloadBtn');
+
+      modal.style.display = 'flex';
+      finalBtn.style.display = 'none';
+      timerText.style.display = 'block';
+
+      let count = 5;
+      countdownSpan.innerText = count;
+
+      const timer = setInterval(() => {
+        count--;
+        countdownSpan.innerText = count;
+
+        if (count <= 0) {
+          clearInterval(timer);
+          timerText.style.display = 'none';
+          finalBtn.href = downloadUrl;
+          finalBtn.style.display = 'flex';
+        }
+      }, 1000);
+    }
+
+    // মডাল ক্লোজ
+    window.onclick = function(event) {
+      const modal = document.getElementById('downloadModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
